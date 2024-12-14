@@ -1,0 +1,82 @@
+create database bank170;
+show databases;
+use bank170;
+create table BRANCH(
+NAME VARCHAR(20),
+CITY VARCHAR(20),
+ASSETS VARCHAR(20),
+PRIMARY KEY(NAME));
+	
+create table bankaccount(
+accno VARCHAR(20),
+nAME VARCHAR(20),
+BALANCE VARCHAR(20),
+PRIMARY KEY (ACCNO,NAME),FOREIGN KEY (NAME) REFERENCES BRANCH (NAME));
+
+CREATE TABLE CUSTOMER (NAME VARCHAR(20),
+STREET VARCHAR(20),
+CITY VARCHAR(20),
+PRIMARY KEY (NAME));
+
+CREATE TABLE  LOAN(
+LOAN_NO VARCHAR(20),
+NAME  VARCHAR(20),
+AMOUNT VARCHAR(20),
+PRIMARY KEY (NAME ),
+foreign key (NAME ) references BRanch(name));
+
+insert into branch values ("SBI_chmarajpet","banglore",50000);
+insert into branch values ("SBI_residencyroad","banglore",10000);
+insert into branch values ("SBI_shivajiroad","bombay",20000);
+insert into branch values ("SBI_parlimentroad","delhi",10000);
+insert into branch values ("SBI_jantarmantar","delhi",20000);
+
+insert into bankaccount values (1,"SBI_chmarajpet",2000);
+insert into bankaccount values (2,"SBI_residencyroad",5000);
+insert into bankaccount values (3,"SBI_shivajiroad",6000);
+insert into bankaccount values (4,"SBI_parlimentroad",9000);
+insert into bankaccount values (5,"SBI_jantarmantar",8000);
+insert into bankaccount values (6,"SBI_shivajiroad",4000);
+insert into bankaccount values (8,"SBI_residencyroad",4000);
+insert into bankaccount values (9,"SBI_parlimentroad",3000);
+insert into bankaccount values (10,"SBI_residencyroad",5000);
+insert into bankaccount values (11,"SBI_jantarmantar",2000);
+
+insert into customer values ("avinash","bull temple road","banglore");
+insert into customer values ("dinesh","bannerghatta road","banglore");
+insert into customer values ("mohan","national clg road","banglore");
+insert into customer values ("nikhil","akbar road ","delhi");
+insert into customer values ("ravi","prithvi raj road","delhi");
+
+insert into depositer values ("avinash",1);
+insert into depositer values ("dinesh",2);
+insert into depositer values ("mohan",3);
+insert into depositer values ("nikhil",4);
+insert into depositer values ("ravi",5);
+insert into depositer values ("avinash",8);
+insert into depositer values ("nikhil",9);
+insert into depositer values ("dinesh",10);
+insert into depositer values ("nikhil",11);
+
+insert into loan values (1,"SBI_chmarajpet",1000);
+insert into loan values (2,"SBI_residencyroad",2000);
+insert into loan values (3,"SBI_shivajiroad",3000);
+insert into loan values (4,"SBI_parlimentroad",4000);
+insert into loan values (5,"SBI_jantarmantar",5000);
+
+select * from branch;
+select * from bankaccount;
+select * from customer;
+select * from depositer;
+select * from loan;
+show tables;
+
+select name,assets_inlakhs from branch;
+alter table branch rename column assets to assets_inlakhs;
+
+select d.name from Depositer d, BankAccount b where
+b.name='SBI_ResidencyRoad' and d.Accno=b.Accno group by d.name having
+count(d.Accno)>=2;
+
+create view br as select name,sum(amount) from loan group by name;
+select * from br; 
