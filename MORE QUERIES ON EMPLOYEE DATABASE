@@ -1,0 +1,15 @@
+select e.ename from employee e where e.empno in(select mgr_no from employee group by mgr_no having count(*)=
+(select max(emp_count) from (select count(*) as emp_count from employee group by mgr_no)AS SUBQUERY));
+
+select e.ename from employee e 
+where e.sal>(select avg(sub.sal) from employee sub 
+where sub.mgr_no=e.empno);
+
+select ename from employee where sal=(select max(sal) from employee where
+sal<(select max(Sal) from employee));
+
+select * from employee where empno=(select empno from incentives where amount=
+(select max(amount) from incentives where amount<
+(select max(amount) from incentives)));
+
+select E.ename from employee e , employee m WHERE e.mgr_no=m.empno aND e.deptno=m.deptno;
