@@ -1,0 +1,60 @@
+create database sup_170;
+use  sup_170;
+create table supplier(
+sid int,
+sname varchar(20),
+city varchar(20),
+primary key(sid));
+
+create table parts(
+pid int,
+pname varchar(20),
+color varchar(20),
+primary key(pid));
+
+create table catalog(
+sid int,pid int, cost int,
+foreign key(sid) references supplier(sid),
+foreign key(pid) references parts(pid));
+ 
+ insert into Supplier values (10001, 'Acme Widget','Bangalore');
+insert into Supplier values (10002, 'Johns','Kolkata');
+insert into Supplier values (10003, 'Vimal','Mumbai');
+insert into Supplier values (10004, 'Reliance','Delhi');
+
+insert into Parts values (20001, 'Book','Red');
+insert into Parts values (20002, 'Pen','Red');
+insert into Parts values (20003, 'Pencil','Green');
+insert into Parts values (20004, 'Mobile','Green');
+insert into Parts values (20005, 'Charger','Black');
+
+insert into Catalog values (10001, 20001 , 10);
+insert into Catalog values (10001, 20002 , 10);
+insert into Catalog values (10001, 20003 , 30);
+insert into Catalog values (10001, 20004 , 10);
+insert into Catalog values (10001, 20005 , 10);
+insert into Catalog values (10002, 20001 , 10);
+insert into Catalog values (10002, 20002 , 20);
+insert into Catalog values (10003, 20003 , 30);
+insert into Catalog values (10004, 20003 , 40);
+
+select distinct p.pname from parts p , catalog c where p.pid=c.pid;
+
+select s.sname from supplier s 
+where NOT exists(select p.pid from
+parts p where not exists (select c.sid from catalog c where c.sid=s.sid and c.pid=p.pid));
+
+SELECT S.SNAME FROM SUPPLIER S 
+WHERE NOT EXISTS( SELECT P.PID FROM PARTS P 
+WHERE P.COLOR="RED" AND NOT EXISTS (
+SELECT C.SID FROM CATALOG C WHERE C.SID=S.SID AND C.PID=P.PID));
+
+select p.pname from parts p,catalog c,supplier s where 
+p.pid=c.Pid and c.sid=s.sid and s.sname="acme widget" and not exists (
+select * from catalog c1,supplier s1 where p.pid=c1.Pid AND C1.SID=s1.sid and s1.sname!="acme widget");
+
+select distinct c.sid from catalog c where c.cost>(select avg(c1.cost) from catalog c1 where c1.pid=c.pid);
+
+SELECT P.PID , S.SNAME FROM PARTS P,SUPPLIER S,CATALOG c 
+WHERE C.PID=P.PID AND C.SID=S.SID AND C.COST=
+(SELECT MAX(C1.COST) from CATALOG C1 WHERE C1.PID=P.PID);
